@@ -1,0 +1,9 @@
+{
+  "name": "minecraft-voxel-recreation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {"dev":"vite --host 127.0.0.1 --port 5173", "build":"vite build", "start":"node server.mjs", "test":"node --test tests/*.test.js"},
+  "dependencies": {"three":"^0.180.0"},
+  "devDependencies": {"vite":"^7.1.7"}
+}
