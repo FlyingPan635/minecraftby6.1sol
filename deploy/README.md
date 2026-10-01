@@ -4,16 +4,18 @@
 
 ## 日常操作
 
-1. 本地修改、运行、试玩满意；先完成项目已有检查。
+1. 本地修改、运行、试玩满意；按本轮改动需要自行决定是否运行开发测试。
 2. 只提交本次想上线的文件，提交并推送游戏仓库的 `main`。包含 Codex 协助修改的提交追加 `Co-authored-by: Codex <noreply@openai.com>`。
 3. 打开 [仓库 Actions](https://github.com/FlyingPan635/minecraftby6.1sol/actions)，选择 **Deploy game**，打开最新运行。绿色表示完成；每个步骤可以展开查看日志。若显示 main 已前进而跳过，查看更新的运行。
 4. 打开游戏刷新检查。线上 `/release.json` 记录当前提交 SHA、运行序号和重试次数。
 
-CI 使用 Node.js 22，执行 `npm ci`、现有 `npm test`（36 项）和 `npm run build -- --base=./`。仅打包构建后的 `dist`；相对 base 同时兼容原本的本地试玩和线上游戏子路径。
+普通 main 推送使用 Node.js 22，执行 `npm ci` 和 `npm run build -- --base=./`，跳过游戏测试。手动 Run workflow 时可勾选“运行游戏测试（通过后发布）”，执行现有 `npm test`（36 项）；测试失败会停止本次发布。勾选默认关闭，手动回滚始终跳过游戏测试。仅打包构建后的 `dist`；相对 base 同时兼容原本的本地试玩和线上游戏子路径。
+
+注意：普通 push 会直接发布。若某次新改动需要先测试再上线，请在本地运行 `npm test`，通过后再 push；手动勾选测试是重新检查并发布 GitHub 上已有的 main。
 
 ## 手动重发与回滚
 
-- **重发当前 main**：Actions → Deploy game → Run workflow → Branch 选 `main` → `rollback_release` 留空 → Run workflow。会重新检查并发布当前版本。
+- **重发当前 main**：Actions → Deploy game → Run workflow → Branch 选 `main` → `rollback_release` 留空 → Run workflow。会重新发布当前版本，始终执行文件校验和上线检查。
 - **回到上一个成功版本**：同一界面将 `rollback_release` 填 `previous`。此操作跳过构建，切换保留的成功版本，仍执行本机和公网检查。
 - **回到指定成功版本**：填版本目录名，如 `2-1-abcdef123456`；必须是服务器仍保留的版本。目录名可在发布日志的 `SUCCESS` 行查看。
 - **失败重试**：运行页面右上角 Re-run jobs。若 main 已更新，旧运行会跳过；推荐 Run workflow 重发当前 main。旧序号已被服务器处理过时会拒绝，不能覆盖更新版本。
