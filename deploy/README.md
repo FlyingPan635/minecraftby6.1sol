@@ -9,9 +9,9 @@
 3. 打开 [仓库 Actions](https://github.com/FlyingPan635/minecraftby6.1sol/actions)，选择 **Deploy game**，打开最新运行。绿色表示完成；每个步骤可以展开查看日志。若显示 main 已前进而跳过，查看更新的运行。
 4. 打开游戏刷新检查。线上 `/release.json` 记录当前提交 SHA、运行序号和重试次数。
 
-普通 main 推送使用 Node.js 22，执行 `npm ci` 和 `npm run build -- --base=./`，跳过游戏测试。手动 Run workflow 时可勾选“运行游戏测试（通过后发布）”，执行现有 `npm test`（36 项）；测试失败会停止本次发布。勾选默认关闭，手动回滚始终跳过游戏测试。仅打包构建后的 `dist`；相对 base 同时兼容原本的本地试玩和线上游戏子路径。
+main 推送或手动重发使用 Node.js 22，执行 `npm ci` 和 `npm run build -- --base=./`，不运行游戏测试，也不提供在线测试选项。游戏测试全部由开发者在本地按需要运行：`npm test`（现有 36 项）。仅打包构建后的 `dist`；相对 base 同时兼容原本的本地试玩和线上游戏子路径。
 
-注意：普通 push 会直接发布。若某次新改动需要先测试再上线，请在本地运行 `npm test`，通过后再 push；手动勾选测试是重新检查并发布 GitHub 上已有的 main。
+本地修改、按需要测试和试玩满意后再 push。线上流程负责构建、打包和发布，文件校验、上线检查和失败自动回滚始终保留。
 
 ## 手动重发与回滚
 

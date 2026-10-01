@@ -5,11 +5,6 @@ on:
     branches: [main]
   workflow_dispatch:
     inputs:
-      run_tests:
-        description: '运行游戏测试（通过后发布）'
-        required: false
-        default: false
-        type: boolean
       rollback_release:
         description: '留空发布当前 main；填 previous 或保留的版本目录名执行回滚'
         required: false
@@ -44,9 +39,6 @@ jobs:
       - name: Install locked dependencies
         if: env.ROLLBACK_RELEASE == ''
         run: npm ci
-      - name: Optional game tests
-        if: env.ROLLBACK_RELEASE == '' && github.event_name == 'workflow_dispatch' && inputs.run_tests
-        run: npm test
       - name: Build for game URL
         if: env.ROLLBACK_RELEASE == ''
         run: npm run build -- --base=./
